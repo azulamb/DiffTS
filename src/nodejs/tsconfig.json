@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"outFile": "../../dest/nodejs/diffts.js",
+		"module": "amd",
+		"moduleResolution": "node",
+		"target": "es6",
+		"lib": [
+			"es2017"
+		],
+		"declaration": true,
+		"strictNullChecks": true,
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": false,
+		"sourceMap": false
+	},
+	"include": [
+		"./**/*.ts"
+	]
+}

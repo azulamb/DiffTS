@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"outFile": "../../dest/browser/diffts.js",
+		"module": "system",
+		"moduleResolution": "node",
+		"target": "es6",
+		"lib": [
+			"es2017"
+		],
+		"declaration": true,
+		"strictNullChecks": true,
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": false,
+		"sourceMap": false
+	},
+	"include": [
+		"./**/*.ts"
+	]
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Diff for TypeScript</title>
+<style type="text/css">
+html { font-size: 20px; height: 100%; padding: 0; margin: 0; }
+body { min-height: 100%; padding: 0; margin: 0; position: relative; }
+article { max-width: 800px; margin: auto; padding-bottom: 1.2rem; }
+ul { list-style: none; padding: 0; margin: 0; width: 100%; }
+ul > li { font-family: monospace; white-space: pre; }
+li.delete { background-color: #fff0f5; }
+li.insert { background-color: #f0f8ff; }
+textarea { width: 50%; height: 5rem; margin: 0; box-sizing: border-box; display: block; float: left; font-size: 1rem; }
+button { clear: both; width: 100%; font-size: 1rem; }
+footer { position: absolute; bottom: 0; width: 100%; text-align: center; }
+</style>
+<script type="text/javascript" src="./diffts.js"></script>
+<script type="text/javascript">
+function diff( a, b ) {
+	var d = new DiffTS.Diff();
+	return d.diff( new DiffTS.StringLines( a ),new DiffTS.StringLines( b ) );
+}
+function clear(){
+	var e = document.getElementById( 'result' );
+	for ( var i = e.children.length - 1 ; 0 <= i ; --i ) { e.removeChild( e.children[ i ] ); }
+	return e;
+}
+function start() {
+	var name = [ 'delete', 'equal', 'insert' ];
+	var d = diff( document.getElementById( 'a' ).value, document.getElementById( 'b' ).value );
+	var e = clear();
+	d.forEach( function( item ) {
+		var cname = name[ item.type + 1 ];
+		item.data.getAll().forEach( function( line ) {
+			var li = document.createElement( 'li' );
+			li.classList.add( cname );
+			li.textContent = line;
+			e.appendChild( li );
+		} );
+	} );
+}
+document.addEventListener('DOMContentLoaded',function() {
+	document.getElementById( 'start' ).addEventListener( 'click', start,false );
+}, false );
+</script>
+</head>
+<body>
+	<article>
+		<textarea id="a"></textarea>
+		<textarea id="b"></textarea>
+		<button id="start">Diff start</button>
+		<ul id="result"></ul>
+	</article>
+	<footer>aa</footer>
+</body>
+</html>
