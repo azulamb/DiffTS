@@ -1,16 +1,16 @@
 # DiffTS
 
-Diff for Typescript.
+TypeScriptで使えるDiff処理を探していたがなかったのと、複数行のテキスト差分と行の文字差分の切り替えなどが面倒だったので、そこら辺の違いを吸収しつつTypeScriptでDiffを出力するライブラリを作ってみた。
 
-Japanese: [README_JA.md](README_JA.md)
+なんかそれっぽく動いているが、書いている本人は処理に自信がない。
 
-# How to use.
+# 利用方法
 
-## Browser
+## ブラウザ
 
-Use `dest/browser/diffts.js` .
+`dest/browser/diffts.js` を使う。
 
-Sample: https://hirokimiyaoka.github.io/DiffTS/
+サンプル: https://hirokimiyaoka.github.io/DiffTS/
 
 ```
 <script type="text/javascript" src="./diffts.js"></script>
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded',function() {
 
 ## Node.js
 
-Use `dest/nodejs/diff.ts` .
+`dest/nodejs/diff.ts` を使う。
 
 ```
 const diffts = require( './dest/nodejs/diffts' );
@@ -68,9 +68,13 @@ const a = d.diff( new diffts.StringLines( 'a\nb\nc' ), new diffts.StringLines( '
 print( a );
 ```
 
-# Other Diff
+# 自作のDiffの追加
 
-Extends `DiffTS.DiffItem` .
+`DiffTS.DiffItem` を継承して各関数を作って、`DiffTS.Diff` の `diff()` メソッドに与えてください。
+
+サンプルとして、複数行が一緒になった文字列2つを比較する場合以下のような実装をします。
+
+ちなみにこれはデフォルトで入っているDiffです。
 
 Sample: `DiffTS.StringLines`
 
@@ -79,9 +83,10 @@ Sample: `DiffTS.StringLines`
 	{
 		private lines: string[];
 
+		// ここは自由に作って。
 		constructor( texts: string | string[] )
 		{
-			super();
+			super(); // これを忘れずに（特に何かするわけではないが）。
 			if ( typeof texts === 'string' )
 			{
 				this.lines = texts.split( /\r\n|\r|\n/ );
@@ -91,8 +96,11 @@ Sample: `DiffTS.StringLines`
 			}
 		}
 
+		// 中身の要素数。今回は行数。
 		public size() { return this.lines.length; }
 
+		// 要素の start 番目から　end 番目までの要素を持った新しい StringLines を返す。
+		// end 省略時は末尾までとする。
 		public subItem( start: number, end?: number )
 		{
 			if ( end === undefined ) { end = this.size(); }
@@ -101,9 +109,16 @@ Sample: `DiffTS.StringLines`
 			return new StringLines( lines );
 		}
 
+		// index 番目の要素の値を返す。今回はindex行目の文字列。
+		// 値はany扱い。
 		public get( index: number ) { return this.lines[ index ]; }
+
+		// 自分の持っているデータすべてを返す。
+		// ちなみにDiff内では使わないため、完全に自分のための処理。
 		public getAll() { return this.lines; }
 
+		// 受け取った値 value が何番目にあるかを返す。
+		// もし存在しない場合は -1 を返す。
 		public indexOf( value: any )
 		{
 			for ( let i = 0 ; i < this.size() ; ++i )
@@ -115,13 +130,15 @@ Sample: `DiffTS.StringLines`
 	}
 ```
 
-# How to build
+これらのメソッドを定義すれば、ちゃんとDiffしてくれるはず。
 
-Installed TypeScript.
+# ビルド方法
+
+TypeScriptをインストール済み前提。
 
 ```
 npm run build
 ```
 
-Output in `dest/` .
+`dest/` 以下に生成物があります。
 
